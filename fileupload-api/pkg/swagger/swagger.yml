@@ -1,0 +1,68 @@
+openapi: 3.0.3
+info:
+  title: Swagger Fileupload Service - OpenAPI 3.0
+  description: |-
+    Fileupload webservice
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+paths:
+  /healthz:
+    get:
+      tags:
+        - health
+      summary: Get server status
+      description: Get server status 
+      operationId: checkHealth
+      responses:
+        '200':
+          description: successful oreration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+        default:
+          description: unexpected error 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      required:
+        - code
+        - message
+    
+    HealthStatus:
+      type: object
+      properties:
+        server: 
+          type: string
+          format: string
+          enum:
+          - OK 
+        database: 
+          type: string
+          format: string
+          enum:
+          - OK
+      required:
+        - server
