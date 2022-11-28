@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: Swagger Fileupload Service - OpenAPI 3.0
+  description: |-
+    Fileupload webservice
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://localhost/api/v1
+paths:
+  /healthz:
+    get:
+      tags:
+        - health
+      summary: Get server status
+      description: Get server status 
+      operationId: checkHealth
+      responses:
+        '200':
+          description: successful oreration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+        default:
+          description: unexpected error 
+          content:
+            application/json:
+             schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+  
+  /uploadFile:
+    post:
+      tags:
+        - fileupload
+      summary: uploads a file
+      description: ''
+      operationId: uploadFile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - file
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid file 
+          content:
+            application/json:
+             schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+        default:
+          description: unexpected error 
+          content:
+            application/json:
+             schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+        
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      required:
+        - code
+        - message
+    
+    HealthStatus:
+      type: object
+      properties:
+        server: 
+          type: string
+          format: string
+          enum:
+          - OK 
+        database: 
+          type: string
+          format: string
+          enum:
+          - OK
+      required:
+        - server
+    
+    ApiResponse:
+      type: object
+      properties:
+        filename:
+          type: string
+          format: string
+        status:
+          type: string
+          format: string
+          enum:
+          - SUCCESS
+          - FAIL
+        date:
+          type: string
+          format: date

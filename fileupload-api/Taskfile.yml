@@ -11,17 +11,22 @@ tasks:
         cmds:
         - GOFLAGS=-mod=mod go run internal/main.go
 
+    run-binary:
+        desc: Runs the binary file
+        cmds:
+        - bin/fileupload-service
+
     swagger.gen:
         desc: Generate Go code
         cmds:
-        - GOFLAGS=-mod=mod go generate github.com/webservices/fileupload-api/internal github.com/webservices/fileupload-api/pkg/swagger
+        - GOFLAGS=-mod=mod go generate github.com/webservices/fileupload-api/internal github.com/webservices/fileupload-api/api
 
     swagger.validate:
         desc: Validate swagger
         cmds:
-        - swagger-cli validate pkg/swagger/swagger.yml
+        - swagger-cli validate api/swagger.yml
 
     swagger.doc:
         desc: Doc for swagger
         cmds:
-        - docker run -i yousan/swagger-yaml-to-html < pkg/swagger/swagger.yml > doc/index.html
+        - docker run -i yousan/swagger-yaml-to-html < api/swagger.yml > doc/index.html
